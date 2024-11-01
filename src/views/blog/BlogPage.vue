@@ -1,40 +1,48 @@
-
 <script setup lang="ts">
+import { successMsg } from '@/helper/ToastNofication';
 import { RouterLink, RouterView } from 'vue-router'
+
+
+const token = localStorage.getItem('token')
+
+function logout() {
+  // Menghapus token dari localStorage
+  localStorage.removeItem('token'); // Ganti 'token' dengan nama kunci yang sesuai jika berbeda
+  successMsg('Logout berhasil')
+  window.location.href = '/login'; // Arahkan ke halaman login setelah logout
+}
 </script>
 
 <template>
   <div class="container-fluid">
     <div class="row">
-      <nav
-        class="navbar navbar-expand-lg fixed-top bg-body-tertiary"
-        style="box-shadow: 2px 2px #e9ecef; border-bottom: #e9ecef"
-      >
+      <nav class="navbar navbar-expand-lg fixed-top bg-body-tertiary"
+        style="box-shadow: 2px 2px #e9ecef; border-bottom: #e9ecef">
         <div class="container-fluid">
           <img src="/src/assets/wizard-logo.png" width="55" alt="" />
           <b>
-            <RouterLink class="navbar-brand"  to="/">Wizard Engineer</RouterLink>
+            <RouterLink class="navbar-brand" to="/">Wizard Engineer</RouterLink>
           </b>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarScroll"
-            aria-controls="navbarScroll"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarScroll">
-            <ul
-              class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
-              style="--bs-scroll-height: 100px"
-            ></ul>
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px"></ul>
+            <!-- Cart -->
+            <RouterLink class="btn btn-outline-primary btn-lg" to="/cart">
+              <i class="bi bi-cart
+              "></i> Cart
+            </RouterLink>
             <form class="d-flex" role="search">
-              
-              <RouterLink class="btn btn-outline-primary btn-lg" type="submit" to="/login"
-                >Login  <i class="bi bi-box-arrow-in-right"></i></RouterLink>
+
+              <RouterLink v-if="!token" class="btn btn-outline-primary btn-lg" type="submit" to="/login">Login <i
+                  class="bi bi-box-arrow-in-right"></i></RouterLink>
+              <!-- logout -->
+              <a v-if="token" class="btn btn-outline-primary btn-lg" @click="logout" style="cursor: pointer">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+              </a>
             </form>
           </div>
         </div>
@@ -68,6 +76,11 @@ import { RouterLink, RouterView } from 'vue-router'
   }
 }
 
+nav {
+  background-color: #f8f9fa;
+}
+
+
 .b-example-divider {
   width: 100%;
   height: 3rem;
@@ -95,6 +108,7 @@ import { RouterLink, RouterView } from 'vue-router'
   z-index: 2;
   height: 2.75rem;
   overflow-y: hidden;
+  background-color: aliceblue;
 }
 
 .nav-scroller .nav {
@@ -140,7 +154,9 @@ import { RouterLink, RouterView } from 'vue-router'
     'Playfair Display',
     Georgia,
     'Times New Roman',
-    serif /*rtl:Amiri, Georgia, "Times New Roman", serif*/;
+    serif
+    /*rtl:Amiri, Georgia, "Times New Roman", serif*/
+  ;
   font-size: 2.25rem;
 }
 
@@ -158,7 +174,9 @@ h6 {
     'Playfair Display',
     Georgia,
     'Times New Roman',
-    serif /*rtl:Amiri, Georgia, "Times New Roman", serif*/;
+    serif
+    /*rtl:Amiri, Georgia, "Times New Roman", serif*/
+  ;
 }
 
 .flex-auto {
@@ -168,6 +186,7 @@ h6 {
 .h-250 {
   height: 250px;
 }
+
 @media (min-width: 768px) {
   .h-md-250 {
     height: 250px;
@@ -185,6 +204,7 @@ h6 {
 .blog-post {
   margin-bottom: 4rem;
 }
+
 .blog-post-meta {
   margin-bottom: 1.25rem;
   color: #727272;

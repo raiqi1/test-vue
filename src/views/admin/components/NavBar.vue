@@ -11,14 +11,19 @@ const navigation = ref( [
     icon: "bi bi-wrench-adjustable",
   },
   {
-    name: "Create Post",
+    name: "Create Product",
     link: "/create-post",
     icon: "bi bi-file-ppt",
   },
   {
-    name: "Articles",
+    name: "List Product",
     link: "/post-lists",
     icon: "bi bi-bookmark",
+  },
+  {
+    name: "Home",
+    link: "/",
+    icon: "",
   },
   
 ]);

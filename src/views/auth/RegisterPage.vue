@@ -1,73 +1,74 @@
 <script lang="ts" setup>
-import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
-import { createUser, registerInput, useCreateUser, type IRegisterInput } from './actions/CreateUser'
-import Error from '@/components/Error.vue'
-import BaseBtn from '@/components/BaseBtn.vue'
+import { ref } from 'vue'
+import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
-const rules = {
-  name: { required }, // Matches state.firstName
-  email: { required, email }, // Matches state.lastName
-  password: { required }
-}
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const role = ref('admin') // Default role
 
-const v$ = useVuelidate(rules, registerInput.value)
+async function handleSubmit() {
+  console.log('Form data before submit:', {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    role: role.value,
+  })
 
-const { loading, createUser } = useCreateUser()
-
-async function registerUser() {
-  const result = await v$.value.$validate()
-
-  if (!result) {
-    return
+  // Membuat data sebagai JSON
+  const formData = {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    role: role.value,
   }
 
-  await createUser()
-  v$.value.$reset()
-
-  // request createUser
+  try {
+    const response = await fetch('https://api-loan-production.up.railway.app/api/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    const data = await response.json()
+    console.log('Response from server:', data)
+    Swal.fire('Success!', 'Registration successful!', 'success') // Show success alert
+    window.location.href = '/login' // Redirect to login page
+  } catch (error) {
+    console.error('Error during registration:', error)
+    Swal.fire('Error!', 'Registration failed! Please try again.', 'error') // Show error alert
+  }
 }
 </script>
 
 <template>
-  <div class="row">
-    <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <div class="card">
-          <!-- {{ registerInput }} -->
-          <div class="card-body">
-            <h2 align="center">Register</h2>
-            <form action="" @submit.prevent="registerUser">
-              <Error label="Name" :errors="v$.name.$errors">
-                <input v-model="registerInput.name" class="form-control form-control-lg" />
-              </Error>
+  <div>
+    <form @submit.prevent="handleSubmit" class="form">
+      <input type="text" v-model="name" class="form-control mb-2" placeholder="Full Name" required />
+      <input type="email" v-model="email" class="form-control mb-2" placeholder="Email" required />
+      <input type="password" v-model="password" class="form-control mb-2" placeholder="Password" required />
 
-              <Error label="Email" :errors="v$.email.$errors">
-                <input v-model="registerInput.email" class="form-control form-control-lg" />
-              </Error>
-
-              <Error label="Password" :errors="v$.password.$errors">
-                <input
-                  type="password"
-                  v-model="registerInput.password"
-                  class="form-control form-control-lg"
-                />
-              </Error>
-
-              <br />
-
-              <RouterLink to="/login">Login into your account</RouterLink>
-              <br />
-              <br />
-              <div class="form-group">
-                <BaseBtn :loading="loading" label="Register" />
-              </div>
-            </form>
-          </div>
-        </div>
+      <div class="mb-2">
+        <label>
+          <input type="radio" value="admin" v-model="role" />
+          Admin
+        </label>
+        <label>
+          <input type="radio" value="lender" v-model="role" />
+          customer
+        </label>
       </div>
-      <div class="col-md-4"></div>
-    </div>
+
+      <button type="submit" class="btn btn-primary">Register</button>
+    </form>
   </div>
 </template>
+
+<style>
+.form {
+  max-width: 400px;
+  margin: auto;
+}
+</style>

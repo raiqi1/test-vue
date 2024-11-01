@@ -20,21 +20,11 @@ async function checkUserLoggedIn() {
   }
 }
 
-async function logout() {
-  const userData = getUserData()
-  try {
-    const data = await makeHttpReq<{ userId: number | undefined }, { message: string }>(
-      `logout`,
-      'POST',
-      { userId: userData?.user?.id }
-    )
-    successMsg(data.message)
-
-    localStorage.clear()
-    window.location.href = '/login'
-  } catch (error) {
-    showError((error as Error).message)
-  }
+function logout() {
+  // Menghapus token dari localStorage
+  localStorage.removeItem('token'); // Ganti 'token' dengan nama kunci yang sesuai jika berbeda
+  successMsg('Logout berhasil')
+  window.location.href = '/login'; // Arahkan ke halaman login setelah logout
 }
 onMounted(async () => {
   await checkUserLoggedIn()
@@ -50,9 +40,10 @@ onMounted(async () => {
           <br /><br />
           <router-view v-slot="{ Component, route }">
             <transition name="fade" mode="out-in">
-              <div :key="route.name">
+              <div :key="route.name ?? 'default-key'">
                 <component :is="Component"></component>
               </div>
+
             </transition>
           </router-view>
         </main>

@@ -85,7 +85,7 @@ async function uploadImage() {
                 <div class="col-md-12">
                 
 
-            <BaseBtn :loading="loading" label="Upload" />
+            <!-- <BaseBtn :loading="loading" label="Upload" /> -->
                 </div>
             </div>
            

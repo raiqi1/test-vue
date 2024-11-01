@@ -1,10 +1,10 @@
 
 
 export const APP={
-    laravelBaseURL:'http://127.0.0.1:8000',
-    nodeBaseURL:'http://127.0.0.1:3000',
+    laravelBaseURL:'https://blog-api-jade-one.vercel.app',
+    nodeBaseURL:'https://blog-api-jade-one.vercel.app',
 
-    laravelApiBaseURL:'http://127.0.0.1:8000/api',
-    nodeApiBaseURL:'http://127.0.0.1:3000/api',
+    laravelApiBaseURL:'https://blog-api-jade-one.vercel.app/api',
+    nodeApiBaseURL:'https://api-loan-production.up.railway.app/api',
 
 }

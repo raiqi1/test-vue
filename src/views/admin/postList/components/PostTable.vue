@@ -19,9 +19,9 @@ const emit=defineEmits<{
     <thead>
       <tr>
         <td>ID</td>
-        <td>Image</td>
-        <td>Title</td>
-        <td>Upload</td>
+        <td>Name</td>
+        <!-- <td>Title</td>
+        <td>Upload</td> -->
         <td>Edit</td>
         <td>Delete</td>
       </tr>
@@ -32,13 +32,16 @@ const emit=defineEmits<{
       
         <td>{{post.id}}</td>
         <td>
+          {{ post.name }}
+        </td>
+        <!-- <td>
           <img style="height: 55px;" :src="post.image"/>
-        </td>
-        <td>
-          {{ post.title }}
-        </td>
+        </td> -->
+        <!-- <td>
+          {{ post.name }}
+        </td> -->
 
-        <td><button @click="emit('showModal',post)" class="btn btn-info btn-sm">Upload</button></td>
+        <!-- <td><button @click="emit('showModal',post)" class="btn btn-info btn-sm">Upload</button></td> -->
         <td><button @click="emit('updatePost',post)" class="btn btn-outline-primary btn-sm">Edit</button></td>
         <td>
           <button @click="emit('deletePost',post.id)"  class="btn btn-outline-danger btn-sm">Delete</button>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { RouterLink } from 'vue-router'
-import { GetArticleResponseType } from '../../home/actions/DisplayArticle'
+import type { GetArticleResponseType } from '../../home/actions/DisplayArticle'
 defineProps<{
   post: GetArticleResponseType | undefined
 }>()
@@ -20,7 +20,7 @@ defineProps<{
           <h2 class="display-5 link-body-emphasis mb-1">{{ post?.title }}</h2>
           <p class="blog-post-meta">January 1, 2021 by <a href="#">Mark</a></p>
 
-          <div v-html="post?.post_content"></div>
+          <!-- <div v-html="post?.post_content"></div> -->
           <!-- <div>{{ post?.post_content }}</div> -->
         </article>
       </div>

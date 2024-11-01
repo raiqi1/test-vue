@@ -1,7 +1,6 @@
-
-
+<!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import { ErrorObject } from "@vuelidate/core"
+import type { ErrorObject } from "@vuelidate/core"
 defineProps<{
   label: string
   errors:ErrorObject[]

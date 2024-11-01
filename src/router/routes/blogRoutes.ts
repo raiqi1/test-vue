@@ -10,12 +10,15 @@ export const blogRoutes= {
         component: () => import('../../views/blog/home/HomePage.vue')
       },
       {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('@/views/blog/cart/CartPage.vue'),
+      },
+      {
         path: '/single-post/:slug',
         name: 'singlePost',
         component: () => import('../../views/blog/singlePost/SinglePostPage.vue')
       },
       
-      
-     
     ]
   }

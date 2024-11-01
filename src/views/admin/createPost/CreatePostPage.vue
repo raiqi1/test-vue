@@ -1,62 +1,69 @@
-<script lang="ts" setup>
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
-import Error from '@/components/Error.vue'
-import BaseBtn from '@/components/BaseBtn.vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { usePostStore } from '@/stores/postStore'
-import { useCreateOrUpdatePost } from './actions/CreatePost'
-
-const rules = {
-  title: { required },
-  post_content: { required }
-}
-
-const postStore = usePostStore()
-
-const v$ = useVuelidate(rules, postStore.postData)
-
-const { loading, createOrUpdate } = useCreateOrUpdatePost()
-
-async function submitPost() {
-  const result = await v$.value.$validate()
-
-  if (!result) {
-    return
-  }
-  await createOrUpdate()
-}
-</script>
 <template>
-  <div class="row">
-    <div class="col-md-10">
-      <div class="card">
-        <div class="card-header">Create Post</div>
-        <!-- {{ postStore.postData }} -->
-        <div class="card-body">
-          <form action="" @submit.prevent="submitPost">
-            <Error label="Post-Title" :errors="v$.title.$errors">
-              <input v-model="postStore.postData.title" class="form-control form-control-lg" />
-            </Error>
-            <Error label="Post-Content" :errors="v$.post_content.$errors">
-              <ckeditor
-                :editor="ClassicEditor"
-                v-model="postStore.postData.post_content"
-                :config="{}"
-              ></ckeditor>
-            </Error>
-            <br />
-            <br />
-
-            <BaseBtn
-            :class="postStore.edit ? 'btn btn-warning' : 'btn btn-primary'"
-             :label="postStore.edit ?'Update Post':'Create Post'" 
-             :loading="loading">
-             </BaseBtn>
-          </form>
-        </div>
+  <div class="container mt-5">
+    <h2>Create Product</h2>
+    <form @submit.prevent="handleSubmit">
+      <div class="mb-3">
+        <label for="name" class="form-label">Product Name</label>
+        <input type="text" id="name" v-model="name" class="form-control" required placeholder="Enter product name" />
       </div>
-    </div>
-    <div class="col-md-4"></div>
+      <button type="submit" class="btn btn-primary">Create Product</button>
+    </form>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { showError } from '@/helper/ToastNofication'; // Adjust the path accordingly
+import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
+
+const name = ref('');
+
+const toast = useToast();
+const router = useRouter();
+async function createPost(name: string) {
+
+  const data = {
+    name,
+  };
+
+  try {
+    const response = await axios.post('https://api-loan-production.up.railway.app/api/products/create-products', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      withCredentials: true,
+    });
+    // const idCompany = response.data.company._id;
+    // console.log("idCompany", idCompany);
+    console.log('Product created successfully:', response.data.message);
+    console.log('Product data:', response.data);
+    // if (response.data.success === true) {
+    //   router.push(`/create-post?=${idCompany}`)
+    // }
+    toast.success('Product created successfully');
+
+  } catch (error: any) {
+    console.error('Error creating company:', error);
+    showError((error.response?.data?.message || error.message) || 'An error occurred.');
+  }
+}
+
+async function handleSubmit() {
+  try {
+    await createPost(name.value);
+    name.value = '';
+  } catch (error) {
+    showError('Failed to create company. Please try again.');
+  }
+}
+</script>
+
+<style scoped>
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+</style>

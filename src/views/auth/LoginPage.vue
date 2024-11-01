@@ -2,17 +2,17 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import Error from '@/components/Error.vue'
-import { loginInput, loginUser, useLoginUser, type ILoginInput } from './actions/LoginUser'
+import { loginInput, useLoginUser } from './actions/LoginUser'
 import BaseBtn from '@/components/BaseBtn.vue'
 
 
 const rules = {
   email: { required, email },
-  password: { required }
+  password: { required },
 }
 
 const v$ = useVuelidate(rules, loginInput.value)
-const {loading,loginUser}=useLoginUser()
+const { loading, loginUser: performLogin } = useLoginUser()
 
 async function submitLogin() {
   const result = await v$.value.$validate()
@@ -20,8 +20,8 @@ async function submitLogin() {
   if (!result) {
     return
   }
-  await loginUser()
- 
+  await performLogin()
+
 }
 </script>
 <template>
@@ -39,19 +39,14 @@ async function submitLogin() {
               </Error>
 
               <Error label="Password" :errors="v$.password.$errors">
-                <input
-                  type="password"
-                  v-model="loginInput.password"
-                  class="form-control form-control-lg"
-                />
+                <input type="password" v-model="loginInput.password" class="form-control form-control-lg" />
               </Error>
-
               <br />
               <RouterLink to="/register">Register</RouterLink>
               <br />
               <br />
               <div class="form-group">
-                <BaseBtn :loading="loading" label="Login" />
+                <BaseBtn :loading="loading" label="Login" icon="login-icon" />
               </div>
             </form>
           </div>

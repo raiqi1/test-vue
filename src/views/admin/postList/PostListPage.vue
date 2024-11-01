@@ -5,7 +5,7 @@ import { useGetPost, type GetPostResponseType } from './actions/GetPost';
 import { closeModal, myDebounce, openModal } from '@/helper/util';
 import { confirmDelation } from '@/helper/sweetAlert';
 import { useDeletePost } from './actions/DeletePost';
-import { usePostStore } from '@/stores/postStore';
+// import { usePostStore } from '@/stores/postStore';
 import { useRouter } from 'vue-router';
 import showUploadImageModal from './components/UploadImageModal.vue'
 const {loading,posts,getPost,query}=useGetPost()
@@ -24,14 +24,11 @@ function deleteArticle(postId:number){
     }).catch((error)=>console.log(error))
 }
 
-const postStore=usePostStore()
+// const postStore=usePostStore()
 const router=useRouter()
 
 function updateArticle(post:GetPostResponseType){
-    const{slug,image,...restProps}=post
-    postStore.postData=restProps
-    postStore.edit=true
-    router.push('/create-post')
+   
 }
 
 function closePostModal(){
